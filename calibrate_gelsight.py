@@ -486,7 +486,7 @@ def takeimg(dir, num, camnum = 0, filename = None):
 if __name__ == "__main__":
     folder = "cam2"
 
-    campara = pickle.load(open(folder+'/cam3_calib.pkl', 'rb'))
+    campara = pickle.load(open(folder+'/cam2_calib.pkl', 'rb'))
     maxcount = 10
 
     takeimg(folder, maxcount, 0)

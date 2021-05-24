@@ -1,10 +1,10 @@
 import cv2
 import numpy as np
 import pickle
-import os
+from calibrate_gelsight import takeimg
 
 def fisheye_calib(camname, num):
-    outputfolder = 'fisheye/'+ camname + '/'
+    inputfolder = 'fisheye/'+ camname + '/'
 
     CHECKERBOARD = (6, 6)
     subpix_criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.1)
@@ -15,34 +15,8 @@ def fisheye_calib(camname, num):
     objpoints = []  # 3d point in real world space
     imgpoints = []  # 2d points in image plane.
 
-    if not os.path.exists(outputfolder):
-        os.makedirs(outputfolder)
-
-    # camera = cv2.VideoCapture(1)
-    # i = 0
-    # while (i<num):
-    #     return_cal, img = camera.read()
-    #     cv2.imshow("tst", img)
-    #     key = cv2.waitKey(0)
-    #     if key & 0xFF == 32:
-    #         print(i, "done")
-    #         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    #         # Find the chess board corners
-    #         ret, corners = cv2.findChessboardCorners(gray, CHECKERBOARD,
-    #                                                  cv2.CALIB_CB_ADAPTIVE_THRESH + cv2.CALIB_CB_FAST_CHECK + cv2.CALIB_CB_NORMALIZE_IMAGE)
-    #         # If found, add object points, image points (after refining them)
-    #         if ret == True:
-    #             objpoints.append(objp)
-    #             cv2.cornerSubPix(gray, corners, (3, 3), (-1, -1), subpix_criteria)
-    #             imgpoints.append(corners)
-    #
-    #         cv2.imwrite(outputfolder + str(i) + '.jpg', img)
-    #         i = i+1
-    # camera.release()
-
-
-    for n in range(0, 40):
-        img = cv2.imread(outputfolder+str(n)+'.jpg')
+    for n in range(0, num):
+        img = cv2.imread(inputfolder+str(n)+'.jpg')
         if _img_shape == None:
             _img_shape = img.shape[:2]
         else:
@@ -85,4 +59,6 @@ def fisheye_calib(camname, num):
     pickle.dump(calib_para, open("fisheye/" + camname + "_calib.pkl", "wb"))
 
 if __name__ == "__main__":
-    fisheye_calib("cam3", 40)
+    camname = "cam2"
+    takeimg("fisheye/"+camname, 40, 0)
+    fisheye_calib(camname, 40)
